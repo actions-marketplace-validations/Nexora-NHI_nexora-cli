@@ -6,6 +6,7 @@ dist/
 # Test artifacts
 coverage.out
 *.test
+cmd/scan-*/
 
 # Editor
 .vscode/
