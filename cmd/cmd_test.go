@@ -141,33 +141,17 @@ func TestWriteFindings_OCSFToFile(t *testing.T) {
 	assert.NotEmpty(t, data)
 }
 
-// --- scan k8s integration (file-based) ---
+// --- fixture path sanity checks ---
 
-func TestScanK8s_VulnerableFixture(t *testing.T) {
-	fixturePath := filepath.Join("..", "fixtures", "vulnerable", "k8s")
-	if _, err := os.Stat(fixturePath); os.IsNotExist(err) {
-		t.Skip("fixture path not found")
+func TestFixturePaths_Exist(t *testing.T) {
+	paths := []string{
+		filepath.Join("..", "fixtures", "vulnerable", "k8s"),
+		filepath.Join("..", "fixtures", "vulnerable", "terraform"),
+		filepath.Join("..", "fixtures", "clean", "k8s"),
+		filepath.Join("..", "fixtures", "clean", "terraform"),
 	}
-
-	import_k8s := func() ([]finding.Finding, error) {
-		import_scanner := func() interface{} { return nil }
-		_ = import_scanner
-		return nil, nil
+	for _, p := range paths {
+		_, err := os.Stat(p)
+		assert.NoError(t, err, "expected fixture path to exist: %s", p)
 	}
-	_, _ = import_k8s()
-
-	// Directly invoke the scanner to validate fixture produces findings
-	// (avoids cobra command execution complexity in tests)
-	// Full integration covered by scanner package tests.
-	t.Log("k8s fixture path exists:", fixturePath)
-}
-
-// --- scan iac integration (file-based) ---
-
-func TestScanIaC_VulnerableFixture(t *testing.T) {
-	fixturePath := filepath.Join("..", "fixtures", "vulnerable", "terraform")
-	if _, err := os.Stat(fixturePath); os.IsNotExist(err) {
-		t.Skip("fixture path not found")
-	}
-	t.Log("iac fixture path exists:", fixturePath)
 }

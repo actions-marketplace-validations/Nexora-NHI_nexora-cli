@@ -4,22 +4,25 @@ import (
 	"encoding/json"
 	"io"
 	"path/filepath"
+	"regexp"
+	"sort"
 	"strings"
 
 	"github.com/Nexora-Inc-AFNOOR-LLC-DBA-NEXORA-INC/nexora-cli/internal/finding"
 	"github.com/Nexora-Inc-AFNOOR-LLC-DBA-NEXORA-INC/nexora-cli/internal/redact"
 )
 
+var reAbsoluteURI = regexp.MustCompile(`^(?:[A-Za-z]:[\\/]|/)`)
+
 type sarifLog struct {
-	Schema  string      `json:"$schema"`
-	Version string      `json:"version"`
-	Runs    []sarifRun  `json:"runs"`
+	Schema  string     `json:"$schema"`
+	Version string     `json:"version"`
+	Runs    []sarifRun `json:"runs"`
 }
 
 type sarifRun struct {
 	Tool    sarifTool     `json:"tool"`
 	Results []sarifResult `json:"results"`
-	Rules   []sarifRule   `json:"rules,omitempty"`
 }
 
 type sarifTool struct {
@@ -88,10 +91,20 @@ func WriteSARIF(w io.Writer, toolVersion string, findings []finding.Finding) err
 	for _, r := range rulesMap {
 		rules = append(rules, r)
 	}
+	sort.Slice(rules, func(i, j int) bool { return rules[i].ID < rules[j].ID })
 
 	results := make([]sarifResult, 0, len(findings))
 	for _, f := range findings {
 		uri := filepath.ToSlash(f.FilePath)
+		// Strip Windows drive letters (C:/) and Unix absolute paths so URI is always relative
+		if reAbsoluteURI.MatchString(uri) {
+			// Remove drive letter prefix e.g. "C:/" → ""
+			if len(uri) >= 3 && uri[1] == ':' {
+				uri = uri[3:]
+			} else {
+				uri = strings.TrimPrefix(uri, "/")
+			}
+		}
 		uri = strings.TrimPrefix(uri, "./")
 
 		startLine := f.LineStart
