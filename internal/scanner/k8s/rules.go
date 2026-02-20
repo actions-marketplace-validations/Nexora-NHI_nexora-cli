@@ -293,7 +293,9 @@ func CheckProjectedTokenExpiry(doc *yaml.Node, filePath string) ([]finding.Findi
 				continue
 			}
 			var expiry int
-			fmt.Sscanf(expiryNode.Value, "%d", &expiry)
+			if _, err := fmt.Sscanf(expiryNode.Value, "%d", &expiry); err != nil {
+				continue
+			}
 			if expiry > 86400 {
 				f := finding.Finding{
 					RuleID:      "NXR-K8S-005",

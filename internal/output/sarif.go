@@ -37,11 +37,11 @@ type sarifDriver struct {
 }
 
 type sarifRule struct {
-	ID               string              `json:"id"`
-	Name             string              `json:"name"`
-	ShortDescription sarifMessage        `json:"shortDescription"`
-	HelpURI          string              `json:"helpUri,omitempty"`
-	Properties       map[string]string   `json:"properties,omitempty"`
+	ID               string            `json:"id"`
+	Name             string            `json:"name"`
+	ShortDescription sarifMessage      `json:"shortDescription"`
+	HelpURI          string            `json:"helpUri,omitempty"`
+	Properties       map[string]string `json:"properties,omitempty"`
 }
 
 type sarifResult struct {
@@ -95,7 +95,7 @@ func WriteSARIF(w io.Writer, toolVersion string, findings []finding.Finding) err
 
 	results := make([]sarifResult, 0, len(findings))
 	for _, f := range findings {
-		uri := filepath.ToSlash(f.FilePath)
+		uri := filepath.ToSlash(strings.ReplaceAll(f.FilePath, "\\", "/"))
 		// Strip Windows drive letters (C:/) and Unix absolute paths so URI is always relative
 		if reAbsoluteURI.MatchString(uri) {
 			// Remove drive letter prefix e.g. "C:/" → ""
@@ -122,8 +122,8 @@ func WriteSARIF(w io.Writer, toolVersion string, findings []finding.Finding) err
 		}
 
 		results = append(results, sarifResult{
-			RuleID: f.RuleID,
-			Level:  severityToSARIFLevel(f.Severity),
+			RuleID:  f.RuleID,
+			Level:   severityToSARIFLevel(f.Severity),
 			Message: sarifMessage{Text: msgText},
 			Locations: []sarifLocation{
 				{
