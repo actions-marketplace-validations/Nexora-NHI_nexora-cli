@@ -47,8 +47,8 @@ func WriteTable(w io.Writer, findings []finding.Finding) error {
 	color := isTerminal()
 
 	tw := tabwriter.NewWriter(w, 0, 0, 2, ' ', 0)
-	fmt.Fprintln(tw, "SEVERITY\tRULE ID\tFILE\tLINE\tTITLE")
-	fmt.Fprintln(tw, strings.Repeat("-", 8)+"\t"+strings.Repeat("-", 10)+"\t"+strings.Repeat("-", 40)+"\t"+strings.Repeat("-", 4)+"\t"+strings.Repeat("-", 50))
+	_, _ = fmt.Fprintln(tw, "SEVERITY\tRULE ID\tFILE\tLINE\tTITLE")
+	_, _ = fmt.Fprintln(tw, strings.Repeat("-", 8)+"\t"+strings.Repeat("-", 10)+"\t"+strings.Repeat("-", 40)+"\t"+strings.Repeat("-", 4)+"\t"+strings.Repeat("-", 50))
 
 	counts := make(map[finding.Severity]int)
 	type row struct {
@@ -81,7 +81,7 @@ func WriteTable(w io.Writer, findings []finding.Finding) error {
 	}
 
 	for _, r := range rows {
-		fmt.Fprintf(tw, "%s\t%s\t%s\t%s\t%s\n", r.sev, r.ruleID, r.file, r.line, r.title)
+		_, _ = fmt.Fprintf(tw, "%s\t%s\t%s\t%s\t%s\n", r.sev, r.ruleID, r.file, r.line, r.title)
 	}
 	if err := tw.Flush(); err != nil {
 		return err
@@ -93,13 +93,13 @@ func WriteTable(w io.Writer, findings []finding.Finding) error {
 	}
 	for _, r := range rows {
 		if r.nhiCtx != "" {
-			fmt.Fprintf(w, "%s%s\n", nhiPrefix, truncate(r.nhiCtx, 100))
+			_, _ = fmt.Fprintf(w, "%s%s\n", nhiPrefix, truncate(r.nhiCtx, 100))
 		}
 	}
 
 	total := len(findings)
 	if total == 0 {
-		fmt.Fprintln(w, "\nNo findings.")
+		_, _ = fmt.Fprintln(w, "\nNo findings.")
 		return nil
 	}
 
@@ -120,7 +120,7 @@ func WriteTable(w io.Writer, findings []finding.Finding) error {
 		}
 	}
 	summary := fmt.Sprintf("\n%d finding(s): %s", total, strings.Join(parts, ", "))
-	fmt.Fprintln(w, summary)
+	_, _ = fmt.Fprintln(w, summary)
 	return nil
 }
 

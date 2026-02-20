@@ -11,24 +11,24 @@ import (
 )
 
 type ocsfFinding struct {
-	ClassUID    int              `json:"class_uid"`
-	CategoryUID int              `json:"category_uid"`
-	ActivityID  int              `json:"activity_id"`
-	TypeUID     int              `json:"type_uid"`
-	Time        int64            `json:"time"`
-	Severity    string           `json:"severity"`
-	SeverityID  int              `json:"severity_id"`
-	Status      string           `json:"status"`
-	FindingInfo ocsfFindingInfo  `json:"finding_info"`
-	Resources   []ocsfResource   `json:"resources"`
-	Metadata    ocsfMetadata     `json:"metadata"`
+	ClassUID    int             `json:"class_uid"`
+	CategoryUID int             `json:"category_uid"`
+	ActivityID  int             `json:"activity_id"`
+	TypeUID     int             `json:"type_uid"`
+	Time        int64           `json:"time"`
+	Severity    string          `json:"severity"`
+	SeverityID  int             `json:"severity_id"`
+	Status      string          `json:"status"`
+	FindingInfo ocsfFindingInfo `json:"finding_info"`
+	Resources   []ocsfResource  `json:"resources"`
+	Metadata    ocsfMetadata    `json:"metadata"`
 }
 
 type ocsfFindingInfo struct {
-	UID         string `json:"uid"`
-	Title       string `json:"title"`
-	Desc        string `json:"desc"`
-	Types       []string `json:"types"`
+	UID   string   `json:"uid"`
+	Title string   `json:"title"`
+	Desc  string   `json:"desc"`
+	Types []string `json:"types"`
 }
 
 type ocsfResource struct {

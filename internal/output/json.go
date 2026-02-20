@@ -9,10 +9,10 @@ import (
 )
 
 type JSONReport struct {
-	ScanID        string           `json:"scan_id"`
-	ScanTimestamp string           `json:"scan_timestamp_utc"`
-	Version       string           `json:"version"`
-	TotalFindings int              `json:"total_findings"`
+	ScanID        string            `json:"scan_id"`
+	ScanTimestamp string            `json:"scan_timestamp_utc"`
+	Version       string            `json:"version"`
+	TotalFindings int               `json:"total_findings"`
 	Findings      []finding.Finding `json:"findings"`
 }
 

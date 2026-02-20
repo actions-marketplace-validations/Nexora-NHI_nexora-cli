@@ -146,7 +146,7 @@ func hashFile(path string) (sha256sum, sha512sum string, err error) {
 	if err != nil {
 		return "", "", err
 	}
-	defer f.Close()
+	defer func() { _ = f.Close() }()
 
 	h256 := sha256.New()
 	h512 := sha512.New()
