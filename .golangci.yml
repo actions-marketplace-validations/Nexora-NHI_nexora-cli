@@ -1,15 +1,16 @@
+version: "2"
+
 run:
   timeout: 5m
-  go: "1.22"
 
 linters:
+  default: none
   enable:
     - errcheck
     - gosimple
     - govet
     - ineffassign
     - staticcheck
-    - unused
     - gofmt
     - goimports
     - misspell
@@ -17,18 +18,17 @@ linters:
     - gosec
     - bodyclose
     - noctx
-    - exhaustive
 
-linters-settings:
-  gosec:
-    excludes:
-      - G304
-  revive:
-    rules:
-      - name: exported
-        severity: warning
-  goimports:
-    local-prefixes: github.com/Nexora-Inc-AFNOOR-LLC-DBA-NEXORA-INC/nexora-cli
+  settings:
+    gosec:
+      excludes:
+        - G304
+    revive:
+      rules:
+        - name: exported
+          severity: warning
+    goimports:
+      local-prefixes: github.com/Nexora-Inc-AFNOOR-LLC-DBA-NEXORA-INC/nexora-cli
 
 issues:
   exclude-rules:

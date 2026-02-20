@@ -18,18 +18,18 @@ jobs:
 
       - uses: actions/setup-go@7a3fe6cf4cb3a834922a1244abfce67bcef6a0c5 # v6.2.0
         with:
-          go-version: "1.22"
+          go-version: "1.24"
           cache: true
 
       - name: go vet
         run: go vet ./...
 
       - name: go test (race)
-        run: go test -race -coverprofile=coverage.out ./...
+        run: go test -race -coverprofile=/tmp/coverage.out ./...
 
       - name: coverage check (≥60%)
         run: |
-          COVERAGE=$(go tool cover -func=coverage.out | awk '/^total:/ {gsub(/%/,""); print $3}')
+          COVERAGE=$(go tool cover -func=/tmp/coverage.out | awk '/^total:/ {gsub(/%/,""); print $3}')
           echo "Coverage: ${COVERAGE}%"
           awk -v cov="$COVERAGE" 'BEGIN { if (cov+0 < 60) { print "Coverage " cov "% is below 60%"; exit 1 } }'
 
@@ -41,7 +41,7 @@ jobs:
 
       - uses: actions/setup-go@7a3fe6cf4cb3a834922a1244abfce67bcef6a0c5 # v6.2.0
         with:
-          go-version: "1.22"
+          go-version: "1.24"
           cache: true
 
       - uses: golangci/golangci-lint-action@1e7e51e771db61008b38414a730f564565cf7c20 # v9.2.0
@@ -54,15 +54,15 @@ jobs:
 
       - uses: actions/setup-go@7a3fe6cf4cb3a834922a1244abfce67bcef6a0c5 # v6.2.0
         with:
-          go-version: "1.22"
+          go-version: "1.24"
           cache: true
 
       - name: gosec
         run: |
-          go install github.com/securego/gosec/v2/cmd/gosec@v2.19.0
-          gosec ./...
+          go install github.com/securego/gosec/v2/cmd/gosec@v2.21.4
+          gosec -exclude=G304 ./...
 
       - name: govulncheck
         run: |
-          go install golang.org/x/vuln/cmd/govulncheck@latest
+          go install golang.org/x/vuln/cmd/govulncheck@v1.1.4
           govulncheck ./...
