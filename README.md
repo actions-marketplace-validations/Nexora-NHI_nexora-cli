@@ -1,5 +1,7 @@
 # nexora-cli
 
+![demo](demo.gif)
+
 **Open-source, read-only NHI (Non-Human Identity) risk scanner** by [Nexora](https://nexora.inc).
 
 Scans GitHub Actions workflows, Kubernetes manifests, and IaC files for machine identity risk patterns. Produces structured findings in table, JSON, SARIF 2.1.0, and OCSF 1.1.0 formats.
@@ -14,12 +16,18 @@ Scans GitHub Actions workflows, Kubernetes manifests, and IaC files for machine 
 
 ## Installation
 
-### Pre-built binary
+### Pre-built binary (macOS/Linux)
 
 ```sh
-# macOS/Linux
 curl -sSfL https://github.com/Nexora-Inc-AFNOOR-LLC-DBA-NEXORA-INC/nexora-cli/releases/latest/download/nexora_$(uname -s)_$(uname -m).tar.gz | tar xz
 sudo mv nexora /usr/local/bin/
+nexora version
+```
+
+### Go install
+
+```sh
+go install github.com/Nexora-Inc-AFNOOR-LLC-DBA-NEXORA-INC/nexora-cli@latest
 ```
 
 ### From source
@@ -28,12 +36,6 @@ sudo mv nexora /usr/local/bin/
 git clone https://github.com/Nexora-Inc-AFNOOR-LLC-DBA-NEXORA-INC/nexora-cli.git
 cd nexora-cli
 make build
-```
-
-### Go install
-
-```sh
-go install github.com/Nexora-Inc-AFNOOR-LLC-DBA-NEXORA-INC/nexora-cli@latest
 ```
 
 ## Quick Start
@@ -79,7 +81,7 @@ nexora verify bundle ./evidence-bundle/
 | NXR-GH-001 | HIGH | Broad workflow-level write permissions without job scoping |
 | NXR-GH-002 | HIGH | Action not pinned to commit SHA |
 | NXR-GH-003 | CRITICAL | pull_request_target with PR-head checkout |
-| NXR-GH-004 | CRITICAL | Hardcoded credential in workflow env |
+| NXR-GH-004 | CRITICAL | Hardcoded credential in workflow env/with/run blocks |
 | NXR-GH-005 | MEDIUM | Self-hosted runner without restriction labels |
 | NXR-GH-006 | HIGH | Token exposure risk in pull_request_target |
 | NXR-GH-007 | MEDIUM | Untrusted GitHub event body/title used in run step |
@@ -90,7 +92,7 @@ nexora verify bundle ./evidence-bundle/
 | Rule ID | Severity | Description |
 |---------|----------|-------------|
 | NXR-K8S-001 | CRITICAL | ServiceAccount bound to cluster-admin |
-| NXR-K8S-002 | INFO | ServiceAccount token automount not explicitly disabled |
+| NXR-K8S-002 | LOW | ServiceAccount token automount not explicitly disabled |
 | NXR-K8S-003 | LOW | Default ServiceAccount used in non-system namespace |
 | NXR-K8S-004 | HIGH | Wildcard RBAC verbs on sensitive resources |
 | NXR-K8S-005 | LOW | Projected ServiceAccountToken expirationSeconds too long |
@@ -130,7 +132,7 @@ Bundles contain `findings.json`, `findings.sarif`, `findings.ocsf.jsonl`, `scan-
   run: nexora scan k8s --path ./k8s/ --format sarif --output k8s.sarif
 
 - name: Upload SARIF
-  uses: github/codeql-action/upload-sarif@v3
+  uses: github/codeql-action/upload-sarif@60168efe1c415ce0f5521ea06d5c2062adbeed1b # v3
   with:
     sarif_file: workflows.sarif
 ```
