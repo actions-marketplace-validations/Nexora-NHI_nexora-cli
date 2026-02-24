@@ -27,3 +27,9 @@ nexora-cli is a **read-only, local scanner**. It:
 - Calls no Nexora internal APIs
 
 The only network-capable command is `nexora scan github`, which calls the GitHub API only when explicitly invoked with a token.
+
+## AI Coding Assistant Safety
+
+This repository contains **no AI instruction files** (`.cursorrules`, `.github/copilot-instructions.md`, `CLAUDE.md`, etc.) and **no hidden Unicode characters**.
+
+All code is human-readable and auditable. Cloning this repo will not inject instructions into your AI coding assistant.
