@@ -26,8 +26,7 @@ It does not call home. It does not require an account. It reads files and tells 
 **macOS / Linux — pre-built binary**
 
 ```sh
-curl -sSfL https://github.com/Nexora-NHI/nexora-cli/releases/latest/download/nexora_$(uname -s)_$(uname -m).tar.gz | tar xz
-sudo mv nexora /usr/local/bin/
+bash -c "$(curl -sSfL https://raw.githubusercontent.com/Nexora-NHI/nexora-cli/main/scripts/install.sh)"
 nexora version
 ```
 
@@ -52,7 +51,7 @@ All releases are signed with cosign and include checksums. To verify:
 ```sh
 # Download the artifact, checksums, and signature
 VERSION=v0.1.0
-ARTIFACT=nexora_0.1.0_linux_amd64.tar.gz
+ARTIFACT=nexora-cli_v0.1.0_linux_amd64.tar.gz
 curl -sSfLO https://github.com/Nexora-NHI/nexora-cli/releases/download/${VERSION}/${ARTIFACT}
 curl -sSfLO https://github.com/Nexora-NHI/nexora-cli/releases/download/${VERSION}/checksums.txt
 curl -sSfLO https://github.com/Nexora-NHI/nexora-cli/releases/download/${VERSION}/checksums.txt.sig
@@ -187,8 +186,7 @@ jobs:
 
       - name: Install nexora-cli
         run: |
-          curl -sSfL https://github.com/Nexora-NHI/nexora-cli/releases/latest/download/nexora_Linux_x86_64.tar.gz | tar xz
-          sudo mv nexora /usr/local/bin/
+          bash -c "$(curl -sSfL https://raw.githubusercontent.com/Nexora-NHI/nexora-cli/main/scripts/install.sh)"
 
       - name: Scan workflows
         run: nexora scan workflows --path ./.github/workflows/ --format sarif --output workflows.sarif

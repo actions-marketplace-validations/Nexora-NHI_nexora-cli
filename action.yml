@@ -29,20 +29,30 @@ inputs:
     required: false
     default: 'true'
 
+  github-token:
+    description: 'Optional: GitHub token (fine-grained) for org scans; defaults to runner GITHUB_TOKEN if not set'
+    required: false
+    default: ''
+
 runs:
   using: 'composite'
   steps:
     - name: Install Nexora CLI
       shell: bash
       run: |
-        curl -sSfL https://github.com/Nexora-NHI/nexora-cli/releases/latest/download/nexora_Linux_x86_64.tar.gz | tar xz
-        sudo mv nexora /usr/local/bin/
+        export INSTALL_DIR="$HOME/.local/bin"
+        mkdir -p "$INSTALL_DIR"
+        bash -c "$(curl -sSfL https://raw.githubusercontent.com/Nexora-NHI/nexora-cli/main/scripts/install.sh)"
+        echo "$HOME/.local/bin" >> "$GITHUB_PATH"
         nexora version
 
     - name: Run Nexora Scan
       shell: bash
       run: |
         if [ "${{ inputs.scan-type }}" = "github" ]; then
+          if [ -n "${{ inputs.github-token }}" ]; then
+            export GITHUB_TOKEN="${{ inputs.github-token }}"
+          fi
           nexora scan github --org ${{ github.repository_owner }} --severity ${{ inputs.severity }} --format ${{ inputs.format }} --output ${{ inputs.output }}
         else
           nexora scan ${{ inputs.scan-type }} --path ${{ inputs.path }} --severity ${{ inputs.severity }} --format ${{ inputs.format }} --output ${{ inputs.output }}

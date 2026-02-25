@@ -23,7 +23,7 @@ if [[ -z "$VERSION" ]]; then
   exit 1
 fi
 
-TARBALL="${BINARY}_${VERSION#v}_${OS}_${ARCH}.tar.gz"
+TARBALL="nexora-cli_${VERSION}_${OS}_${ARCH}.tar.gz"
 URL="https://github.com/${REPO}/releases/download/${VERSION}/${TARBALL}"
 
 TMP=$(mktemp -d)

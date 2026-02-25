@@ -49,9 +49,7 @@ docker run --rm -v /path/to/repo:/scan ghcr.io/nexora-nhi/nexora-cli:v0.1.0 \
 ### Binary (Linux/macOS)
 
 ```bash
-VERSION=v0.1.0
-curl -sSfL https://github.com/Nexora-NHI/nexora-cli/releases/download/${VERSION}/nexora_Linux_x86_64.tar.gz | tar xz
-sudo mv nexora /usr/local/bin/
+bash -c "$(curl -sSfL https://raw.githubusercontent.com/Nexora-NHI/nexora-cli/main/scripts/install.sh)"
 nexora version
 ```
 
