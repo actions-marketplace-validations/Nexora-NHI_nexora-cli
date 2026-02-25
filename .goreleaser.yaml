@@ -69,6 +69,7 @@ brews:
   - repository:
       owner: Nexora-NHI
       name: homebrew-tap
+      token: "{{ .Env.HOMEBREW_TAP_TOKEN }}"
     homepage: "https://github.com/Nexora-NHI/nexora-cli"
     description: "NHI risk scanner for GitHub Actions, Kubernetes, and IaC"
     license: "Apache-2.0"

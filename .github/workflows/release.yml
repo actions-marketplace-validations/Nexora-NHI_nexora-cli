@@ -49,6 +49,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           COSIGN_EXPERIMENTAL: "1"
+          HOMEBREW_TAP_TOKEN: ${{ secrets.HOMEBREW_TAP_TOKEN }}
 
       - name: Attest build provenance
         uses: actions/attest-build-provenance@c4fbc648846ca6f503a13a7e8917b6b1d3e1d323 # v2.3.0
