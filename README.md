@@ -9,7 +9,7 @@
 
 Open-source CLI that finds Non-Human Identity (NHI) risks in GitHub Actions workflows, Kubernetes manifests, and Terraform/IaC files — before they become incidents.
 
-Built by [Nexora](https://nexora.inc). MIT licensed. No telemetry. No SaaS. Runs entirely on your machine.
+Built by [Nexora](https://nexora.inc). Apache 2.0 licensed. No telemetry. No SaaS. Runs entirely on your machine.
 
 ---
 
@@ -44,6 +44,33 @@ git clone https://github.com/Nexora-NHI/nexora-cli.git
 cd nexora-cli
 make build
 ```
+
+**Verify downloads (recommended for production use)**
+
+All releases are signed with cosign and include checksums. To verify:
+
+```sh
+# Download the artifact, checksums, and signature
+VERSION=v0.1.0
+ARTIFACT=nexora_0.1.0_linux_amd64.tar.gz
+curl -sSfLO https://github.com/Nexora-NHI/nexora-cli/releases/download/${VERSION}/${ARTIFACT}
+curl -sSfLO https://github.com/Nexora-NHI/nexora-cli/releases/download/${VERSION}/checksums.txt
+curl -sSfLO https://github.com/Nexora-NHI/nexora-cli/releases/download/${VERSION}/checksums.txt.sig
+curl -sSfLO https://github.com/Nexora-NHI/nexora-cli/releases/download/${VERSION}/checksums.txt.pem
+
+# Verify the signature (requires cosign)
+cosign verify-blob \
+  --certificate checksums.txt.pem \
+  --signature checksums.txt.sig \
+  --certificate-identity-regexp "^https://github.com/Nexora-NHI/nexora-cli/" \
+  --certificate-oidc-issuer "https://token.actions.githubusercontent.com" \
+  checksums.txt
+
+# Verify the checksum
+grep ${ARTIFACT} checksums.txt | sha256sum -c -
+```
+
+See [scripts/verify-release.sh](scripts/verify-release.sh) for an automated verification script.
 
 ---
 
@@ -129,7 +156,7 @@ CI pipelines can use exit code `1` to fail a build on findings.
 | `--format table` | Terminal table with color | Default, local review |
 | `--format json` | Structured JSON | Pipelines, custom tooling |
 | `--format sarif` | SARIF 2.1.0 | GitHub Code Scanning, VS Code |
-| `--format ocsf` | OCSF 1.1.0 JSONL | AWS Security Lake, Splunk |
+| `--format ocsf` | OCSF 1.1.0 JSONL | SIEMs (Splunk, Elastic, Chronicle) — see [Security Lake integration](docs/integrations/security-lake.md) for Parquet conversion |
 
 ---
 

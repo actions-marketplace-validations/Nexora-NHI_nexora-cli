@@ -11,7 +11,7 @@ make test
 
 ## Development Requirements
 
-- Go 1.22+
+- Go 1.24+
 - golangci-lint v2.10.1
 - gosec v2.21.4
 - govulncheck v1.1.4
@@ -45,4 +45,4 @@ This is an open-source tool. Do not include:
 
 ## Code of Conduct
 
-Be respectful and constructive. See [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) if present.
+Be respectful and constructive. See [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).

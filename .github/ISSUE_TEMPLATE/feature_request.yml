@@ -1,0 +1,57 @@
+name: Feature Request
+description: Suggest a new detection rule or feature
+labels: [enhancement]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting an improvement. Please fill out all fields.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem does this solve?
+      description: Describe the security risk or gap this feature addresses.
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed solution
+      description: Describe what you want nexora-cli to detect or do.
+    validations:
+      required: true
+
+  - type: textarea
+    id: example
+    attributes:
+      label: Example input that should be flagged
+      description: Paste a code snippet or config that should trigger a finding.
+      render: yaml
+
+  - type: dropdown
+    id: scan_type
+    attributes:
+      label: Scan type
+      options:
+        - GitHub Actions workflows
+        - Kubernetes manifests
+        - Terraform / IaC
+        - New scan type
+        - Other (CLI, output, reporting)
+    validations:
+      required: true
+
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Expected severity
+      options:
+        - CRITICAL
+        - HIGH
+        - MEDIUM
+        - LOW
+        - INFO
+    validations:
+      required: true
